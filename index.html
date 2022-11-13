@@ -3,106 +3,155 @@
 <head>
   <style>
     div.keyboard {
-      width: 100%;
+      transform: rotate(-0);
+      margin: 40px;
+      padding: 10px;
+      border-radius: 32px;
+      box-shadow: 10px 20px 25px 24px #696969;
     }
 
     div.row {
       display: flex;
       justify-content: space-between;
-      justify-items: stretch;
+      /* justify-items: stretch; */
     }
 
-    kbd {
-      display: inline-block;
-      border-radius: 2px;
+    button {
+      /* display: inline-block; */
       padding-left: 8px;
       padding-right: 8px;
       margin-left: 16px;
       margin-right: 16px;
-      border: 1px solid black;
-      font-size: 3.0vw;
+      border-radius: 7px;
+      border-width: 16px;
+      /* border: 1px solid black; */
+      font-size: 1.6vw;
+      min-width: 3.2vw;
     }
-
-    kbd.letter {}
   </style>
 </head>
 
 <body>
-  <div class="keybaord">
+  <div class="keyboard">
     <div class="row">
       <p>
-        <kbd alt="~">`</kbd>
-        <kbd alt="!">1</kbd>
-        <kbd alt="@">2</kbd>
-        <kbd alt="#">3</kbd>
-        <kbd alt="$">4</kbd>
-        <kbd alt="%">5</kbd>
-        <kbd alt="^">6</kbd>
-        <kbd alt="&">7</kbd>
-        <kbd alt="*">8</kbd>
-        <kbd alt="(">9</kbd>
-        <kbd alt=")">0</kbd>
-        <kbd alt="_">-</kbd>
-        <kbd alt="+">=</kbd>
-        <kbd>Backspace</kbd>
+        <button code="Backquote" alt="~">`</button>
+        <button code="Digit1" alt="!">1</button>
+        <button code="Digit2" alt="@">2</button>
+        <button code="Digit3" alt="#">3</button>
+        <button code="Digit4" alt="$">4</button>
+        <button code="Digit5" alt="%">5</button>
+        <button code="Digit6" alt="^">6</button>
+        <button code="Digit7" alt="&">7</button>
+        <button code="Digit8" alt="*">8</button>
+        <button code="Digit9" alt="(">9</button>
+        <button code="Digit0" alt=")">0</button>
+        <button code="Minus" alt="_">-</button>
+        <button code="Equal" alt="+">=</button>
+        <button code="Backspace">Backspace</button>
     </div>
     <div class="row">
       <p>
-        <kbd>Tab</kbd>
-        <kbd>Q</kbd>
-        <kbd>W</kbd>
-        <kbd>E</kbd>
-        <kbd>R</kbd>
-        <kbd>T</kbd>
-        <kbd>Y</kbd>
-        <kbd>U</kbd>
-        <kbd>I</kbd>
-        <kbd>O</kbd>
-        <kbd>P</kbd>
-        <kbd alt="{">[</kbd>
-        <kbd alt="}">]</kbd>
-        <kbd alt="|">\</kbd>
+        <button code="Tab">Tab</button>
+        <button code="KeyQ">Q</button>
+        <button code="KeyW">W</button>
+        <button code="KeyE">E</button>
+        <button code="KeyR">R</button>
+        <button code="KeyT">T</button>
+        <button code="KeyY">Y</button>
+        <button code="KeyU">U</button>
+        <button code="KeyI">I</button>
+        <button code="KeyO">O</button>
+        <button code="KeyP">P</button>
+        <button code="BracketLeft" alt="{">[</button>
+        <button code="BracketRight" alt="}">]</button>
+        <button code="Backslash" alt="|">\</button>
     </div>
     <div class="row">
       <p>
-        <kbd>Caps Lock</kbd>
-        <kbd>A</kbd>
-        <kbd>S</kbd>
-        <kbd>D</kbd>
-        <kbd>F</kbd>
-        <kbd>G</kbd>
-        <kbd>H</kbd>
-        <kbd>J</kbd>
-        <kbd>K</kbd>
-        <kbd>L</kbd>
-        <kbd alt=":">;</kbd>
-        <kbd alt='"'>'</kbd>
+        <button code="CapsLock">Caps Lock</button>
+        <button code="KeyA">A</button>
+        <button code="KeyS">S</button>
+        <button code="KeyD">D</button>
+        <button code="KeyF">F</button>
+        <button code="KeyG">G</button>
+        <button code="KeyH">H</button>
+        <button code="KeyJ">J</button>
+        <button code="KeyK">K</button>
+        <button code="KeyL">L</button>
+        <button code="Semicolon" alt=":">;</button>
+        <button code="Quote" alt='"'>'</button>
     </div>
     <div class="row">
       <p>
-        <kbd>Shift</kbd>
-        <kbd>Z</kbd>
-        <kbd>X</kbd>
-        <kbd>C</kbd>
-        <kbd>V</kbd>
-        <kbd>B</kbd>
-        <kbd>N</kbd>
-        <kbd>M</kbd>
-        <kbd alt="<">,</kbd>
-        <kbd alt=">">.</kbd>
-        <kbd alt="?">/</kbd>
+        <button code="ShiftLeft">Shift</button>
+        <button code="KeyZ">Z</button>
+        <button code="KeyX">X</button>
+        <button code="KeyC">C</button>
+        <button code="KeyV">V</button>
+        <button code="KeyB">B</button>
+        <button code="KeyN">N</button>
+        <button code="KeyM">M</button>
+        <button code="Comma" alt="<">,</button>
+        <button code="Period" alt=">">.</button>
+        <button code="Slash" alt="?">/</button>
     </div>
     <div class="row">
       <p>
-        <kbd>Ctrl</kbd>
-        <kbd>Fn</kbd>
-        <kbd>Meta</kbd>
-        <kbd>Spacebar</kbd>
-        <kbd>Alt</kbd>
-        <kbd>Fn</kbd>
-        <kbd>Ctrl</kbd>
+        <button code="ControlLeft">Ctrl</button>
+        <button code="Fn" disabled>Fn</button>
+        <button code="Meta" disabled>Meta</button>
+        <button code="Space">Spacebar</button>
+        <button code="AltRight">Alt</button>
+        <button code="FnRight" disabled>Fn</button>
+        <button code="ControlRight">Ctrl</button>
     </div>
   </div>
 </body>
+
+<script>
+  var keyboard = document.querySelector('div.keyboard');
+
+  var codeToKeyMap = {};
+
+  function mouseEvent(elem, eventType) {
+    if (eventType === 'keydown') {
+      elem.style.borderStyle = 'inset';
+    } else if (eventType === 'keyup') {
+      elem.style.borderStyle = 'outset';
+    } else {
+      console.log(`mouseEvent: eventType: "${eventType}" not supported`);
+    }
+  }
+
+  keyboard.querySelectorAll('button').forEach(
+    (key) => {
+      codeToKeyMap[key.getAttribute('code')] = key;
+      // if (key.getAttribute('alt')) {
+      //   key.innerHTML = `<div>${key.getAttribute('alt')}<br>${key.innerHTML}`;
+      // }
+    }
+  );
+
+  window.addEventListener('keydown', function (e) {
+    if (!(e.code in codeToKeyMap)) {
+      console.log("key not supported");
+      console.log(e);
+      return;
+    }
+    var key = codeToKeyMap[e.code];
+    mouseEvent(key, e.type);
+  });
+
+  window.addEventListener('keyup', function (e) {
+    if (!(e.code in codeToKeyMap)) {
+      console.log("key not supported");
+      console.log(e);
+      return;
+    }
+    var key = codeToKeyMap[e.code];
+    mouseEvent(key, e.type);
+  });
+</script>
 
 </html>
