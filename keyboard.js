@@ -32,7 +32,7 @@ function CreateKeyboard(elem) {
       <button code="KeyP">P</button>
       <button code="BracketLeft" alt="{">[</button>
       <button code="BracketRight" alt="}">]</button>
-      <button code="Backslash" alt="|">\</button>
+      <button code="Backslash" alt="|">\\</button>
   </div>
   <div class="row">
     <p>
