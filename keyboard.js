@@ -76,8 +76,6 @@ function CreateKeyboard(elem) {
     return elem
 }
 
-var codeToKeyMap = {};
-
 function mouseEvent(elem, eventType) {
     if (eventType === 'keydown') {
         elem.style.borderStyle = 'inset';
@@ -88,7 +86,11 @@ function mouseEvent(elem, eventType) {
     }
 }
 
-window.onload = (event) => {
+var debug = false;
+// Mappings to keys from keypress codes for that sweet O(1) lookup time.
+var codeToKeyMap = {};
+
+window.addEventListener('load', (event) => {
     var keyboard = document.querySelector('div.keyboard');
     keyboard.querySelectorAll('button').forEach(
         (key) => {
@@ -102,21 +104,25 @@ window.onload = (event) => {
 
     window.addEventListener('keydown', function (e) {
         if (!(e.code in codeToKeyMap)) {
-            console.log("key not supported");
-            console.log(e);
+            if (debug) {
+                console.log("key not supported");
+                console.log(e);
+            }
             return;
         }
         var key = codeToKeyMap[e.code];
         mouseEvent(key, e.type);
-    });
+    }, /* useCapture: */ true);
 
     window.addEventListener('keyup', function (e) {
         if (!(e.code in codeToKeyMap)) {
-            console.log("key not supported");
-            console.log(e);
+            if (debug) {
+                console.log("key not supported");
+                console.log(e);
+            }
             return;
         }
         var key = codeToKeyMap[e.code];
         mouseEvent(key, e.type);
-    });
-};
+    }, /* useCapture: */ true);
+});;

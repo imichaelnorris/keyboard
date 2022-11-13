@@ -2,7 +2,7 @@
   "name": "xterm-sandbox",
   "version": "1.0.0",
   "description": "just fucking around with xterm",
-  "main": "index.js",
+  "main": "nterm.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
