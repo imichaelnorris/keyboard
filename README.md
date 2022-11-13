@@ -1,8 +1,12 @@
 # NorrOS
-A styled keyboard + terminal emulator in JavaScript. Right now it's a textarea with a keyboard that listens and responds to keypresses.
+A styled keyboard + terminal emulator in JavaScript.
 
 ![](/norros-screenshot.png?raw=true)
 
-
 # Name
 In the style of those who came before me, I have decided to name an operating system / emulator after myself.
+
+# Terminal
+I am using xterm for the terminal UI. See /xterm-sandbox for an example.
+
+Right now all commands just echo!
