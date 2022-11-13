@@ -1,5 +1,5 @@
 {
-  "name": "mterm",
+  "name": "nterm",
   "version": "1.0.0",
   "description": "just fucking around with xterm",
   "main": "nterm.js",
