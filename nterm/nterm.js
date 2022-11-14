@@ -10,6 +10,7 @@ class NTerm {
     static defaultUIOptions = {
         padding: "4px",
     };
+
     // Pass in the HTML element which will have a terminal instantiated inside.
     constructor(elem, uiOptions) {
         if (typeof (elem) === 'string') {

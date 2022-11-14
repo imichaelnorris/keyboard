@@ -1,3 +1,5 @@
+import { File, Folder, Path } from "../filesystem/filesystem.js";
+
 export const name = 'nosh';
 
 export { Nosh }
@@ -94,7 +96,14 @@ class Nosh {
         this.cwd = null;
     }
 
+    processCmd() {
+        var command = this.term.command
+    }
+
     cd(dir) {
+        if (typeof (dir) === undefined || dir == '') {
+            return this;
+        }
         if (!window.norros.mkernel.filesystem.fileExists(dir)) {
             throw Error(`nosh: cd: ${dir}: No such file or directory.`)
         }
@@ -102,8 +111,50 @@ class Nosh {
         return this;
     }
 
+    clear() {
+        this.term.clear();
+    }
+
     help() {
-        return help;
+        this.term.writeln(help);
+        return 0;
+    }
+
+    ls(arg) {
+        if (typeof (arg) !== 'undefined' && typeof (arg) == 'String' && arg.length >= 1) {
+            // Not absolute path.
+            if (arg[0] != '/') {
+                arg = Path.join(this.cwd, arg);
+            }
+        }
+        var file = window.norros.mkernel.filesystem.getFile(this.cwd);
+        if (file === null) {
+            this.term.writeln('ls: cannot access ')
+        }
+        else if (file instanceof File) {
+            this.term.writeln(`${file.name}`);
+        }
+        else if (file instanceof Folder) {
+            var files = [];
+            for (var file in file.files) {
+                files.push(file);
+            }
+            console.log(files);
+            this.term.writeln(files.join('\n'));
+        }
+        else {
+            console.log(file);
+            throw Error('ls: some kind of error occurred');
+        }
+    }
+
+    pwd() {
+        this.term.writeln(this.cwd);
+    }
+
+    date() {
+        this.term.writeln();
+        this.term.writeln(new Date());
     }
 
     static install() {

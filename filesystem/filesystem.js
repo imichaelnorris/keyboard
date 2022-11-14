@@ -1,14 +1,61 @@
 export const name = 'filesystem';
 
-export { FileSystem, File, Folder }
+export { FileSystem, File, Folder, Path }
 
 class FileSystem {
     constructor() {
         this.root = new Folder("/");
     }
 
-    getFile(fileName) {
+    // Returns the file if it exists, else returns null.
+    getFile(fileName, root) {
+        if (typeof (root) === 'undefined') {
+            root = this.root;
+        }
+        if (root === this.root) {
+            if (fileName === "/") {
+                return root;
+            }
+            fileName = fileName.substring(1);
+        }
+        if (typeof (root) === String) {
+            throw Error("This should probably support a string as the root\
+arg but it doesn't yet. Please pass a folder as the root arg.");
+            // This would probably be implemented as this.getFile(root)
+        }
+        return this._getFileRecursive(fileName, this.root);
+    }
 
+    // Does string: file exist in Folder: root?
+    _getFileRecursive(fileName, root, debug) {
+        if (typeof (debug) !== 'undefined') {
+            console.log(`fileExistsRecursive: ${fileName}`);
+        }
+        if (fileName in ["/", ".", ""]) {
+            return root;
+        }
+        var numFolders = fileName.match(/\//g);
+        if (numFolders == null) {
+            return fileName in root.files ? root.files[fileName] : null;
+        }
+        var split = /\//.exec(fileName);
+        var newFile = fileName.substring(0, split.index);
+
+        // File not in this directory. It doesn't exist.
+        if (!(newFile in root.files)) {
+            return null;
+        }
+
+        // The file exists in this directory and it isn't a folder and the fileName has 
+        // no more children.
+        if (split == fileName.length) {
+            return root.files[newFile];
+        }
+
+        var file = root.files[newFile];
+
+        var nextFile = fileName.substring(/\//.exec(fileName).index + 1);
+        return this._getFileRecursive(nextFile, file, debug);
     }
 
     // Does the file exist? Supports a search starting
@@ -64,7 +111,7 @@ arg but it doesn't yet. Please pass a folder as the root arg.");
         }
 
         var nextFile = fileName.substring(/\//.exec(fileName).index + 1);
-        return this._fileExistsRecursive(nextFile, file);
+        return this._fileExistsRecursive(nextFile, file, debug);
     }
 }
 
@@ -114,5 +161,32 @@ class File {
         this.contents = contents;
         this.parent = parent;
         this.lastUpdated = new Date();
+    }
+}
+
+class Path {
+    static separator = '/';
+
+    // TODO: imeplement this. Right now it's just joining together regardless.
+    // Join parts of a path together. Similar to Python's os.path.join.
+    // If part[i] and part[j] have or don't have a separator between them
+    static join(...parts) {
+        var t = '';
+        for (var i = 0; i < parts; i++) {
+            if (t.length == 0) {
+                t += parts[i]
+            } else {
+                var tEndsInSeparator = t.substring(t.length - 1) == Path.separator;
+                var partStartsInSeparator = parts[i].length > 0 && parts[i] == Path.separator;
+                if (tEndsInSeparator ^ partStartsInSeparator) {
+                    t += parts[i];
+                } else if (tEndsInSeparator && partStartsInSeparator) {
+                    t += parts[i].substring(1);
+                } else {
+                    t += Path.separator + parts[i];
+                }
+            }
+        }
+        return t;
     }
 }
