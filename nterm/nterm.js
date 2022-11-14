@@ -9,7 +9,7 @@ class NTerm {
         if (typeof (elem) === 'string') {
             elem = document.querySelector(elem);
         }
-        this.prompt = 'Hello from \x1B[1;3;31mxterm.js\x1B[0m $ ';
+        this.prompt = ' NorrOS \x1B[1;3;31mNorrOS\x1B[0m $ ';
         this.init(elem);
 
         // TOOD: limit the number of commands kept.
@@ -28,6 +28,14 @@ class NTerm {
         this.term.focus();
 
         this.showPrompt();
+    }
+
+    cd(dir) {
+        if (!window.norros.mkernel.filesystem.fileExists(dir)) {
+            throw Error(`nosh: cd: ${dir}: No such file or directory.`)
+        }
+        this.cwd = dir;
+        return this;
     }
 
     showPrompt() {

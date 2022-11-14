@@ -1,3 +1,5 @@
+import { FileSystem } from '../filesystem/filesystem.js'
+
 export const name = 'mkernel';
 
 export { MKernel }
@@ -6,6 +8,7 @@ class MKernel {
     constructor() {
         this.pid = 1;
         this.processes = {};
+        this.filesystem = new FileSystem();
     }
 
     start(program) {
