@@ -1,0 +1,7 @@
+div.monitor {
+    height: 47%;
+    padding: 16px;
+    margin: 32px;
+    box-shadow: 10px 20px 25px 24px #696969;
+    border-radius: 12px;
+}
