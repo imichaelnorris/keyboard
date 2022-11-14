@@ -31,8 +31,10 @@ arg but it doesn't yet. Please pass a folder as the root arg.");
     }
 
     // Does string: file exist in Folder: root?
-    _fileExistsRecursive(fileName, root) {
-        console.log(`fileExistsRecursive: ${fileName}`);
+    _fileExistsRecursive(fileName, root, debug) {
+        if (typeof (debug) !== 'undefined') {
+            console.log(`fileExistsRecursive: ${fileName}`);
+        }
         if (fileName in ["/", ".", ""]) {
             return true;
         }

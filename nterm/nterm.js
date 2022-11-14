@@ -1,8 +1,11 @@
+import { Nosh } from "../nosh/nosh.js";
+
 export const name = 'nterm';
 
 export { NTerm }
 
-
+// This is the UI stuff.
+// Nosh is more like the controller and a bunch of programs for NTerm.
 class NTerm {
     // Pass in the HTML element which will have a terminal instantiated inside.
     constructor(elem) {
@@ -14,6 +17,7 @@ class NTerm {
 
         // TOOD: limit the number of commands kept.
         this.commands = [];
+        this.nosh = new Nosh();
     }
 
     init(elem) {
@@ -31,10 +35,7 @@ class NTerm {
     }
 
     cd(dir) {
-        if (!window.norros.mkernel.filesystem.fileExists(dir)) {
-            throw Error(`nosh: cd: ${dir}: No such file or directory.`)
-        }
-        this.cwd = dir;
+        this.nosh.cd(dir);
         return this;
     }
 
