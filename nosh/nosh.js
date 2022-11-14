@@ -89,7 +89,8 @@ A star (*) next to a name means that the command is disabled.
  *{ COMMANDS ; }`;
 
 class Nosh {
-    constructor() {
+    constructor(term) {
+        this.term = term;
         this.cwd = null;
     }
 
@@ -103,5 +104,12 @@ class Nosh {
 
     help() {
         return help;
+    }
+
+    static install() {
+        var noshrc = "/home/user/.noshrc";
+        var fileContents = "PS1='\[\0o33[01;32m\]{`date +\" % a % b % Y % H:% M:% S\"`\[\0o33[00m\] \[\0o33[01;34m\]{\w}}\[\0o33[00m\]\$ '";
+        // then create this file.
+        // TODO: add this once mkdir -p and create file are implemented.
     }
 }

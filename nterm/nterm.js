@@ -7,15 +7,24 @@ export { NTerm }
 // This is the UI stuff.
 // Nosh is more like the controller and a bunch of programs for NTerm.
 class NTerm {
+    static defaultUIOptions = {
+        padding: "4px",
+    };
     // Pass in the HTML element which will have a terminal instantiated inside.
-    constructor(elem) {
+    constructor(elem, uiOptions) {
         if (typeof (elem) === 'string') {
             elem = document.querySelector(elem);
         }
-        this.prompt = ' NorrOS \x1B[1;3;31mNorrOS\x1B[0m $ ';
+        if (typeof (uiOptions) === 'undefined') {
+            uiOptions = NTerm.defaultUIOptions;
+        }
+
+        this.uiOptions = uiOptions;
+
+        this.prompt = 'NorrOS \x1B[1;3;31mNorrOS\x1B[0m $ ';
         this.init(elem);
 
-        // TOOD: limit the number of commands kept.
+        // TOOD: handle this in nosh.
         this.commands = [];
         this.nosh = new Nosh();
     }
@@ -30,6 +39,7 @@ class NTerm {
         this.term.onData((e) => this.onData(e));
         this.term.open(elem);
         this.term.focus();
+        this.term.element.style.padding = `${this.uiOptions.padding}`;
 
         this.showPrompt();
     }
@@ -105,13 +115,21 @@ class NTerm {
         this.term.writeln(`\n\r${this.command}`, () => this.showPrompt());
     }
 
+    get options() {
+        return this.term.options;
+    }
+
+    get parser() {
+        return this.term.parser;
+    }
+
     // Add a window.load event to start the terminal, good for standalone usages of nterm.
     // Example:
     // Mterm.createOnLoad(document.querySelector('div.terminal'));
     static createOnLoad(querySelector) {
         window.addEventListener('load', (event) => {
             // This is how you would instantiate 
-            var mterm = new NTerm(querySelector);
+            window.nterm = new NTerm(querySelector);
         });
     }
 }
