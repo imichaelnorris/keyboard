@@ -116,9 +116,11 @@ class Nosh {
 
     processCmd(command) {
         var command = this.nterm.command.trim();
+        this.nterm.command = '';
         if (command.length === 0) {
-            this.nterm.term.write('\n\r');
-            return new Promise((resolve) => { resolve(); });
+            return new Promise((resolve) => {
+                this.nterm.term.write('\n\r', () => resolve());
+            });
         }
         var progArgs = command.split();
         var program = '';
@@ -128,30 +130,38 @@ class Nosh {
         }
         program = progArgs[0];
         if (!(program in this.commands)) {
-            this.commandNotFound(program);
+            return this.commandNotFound(program);
         } else {
-            this.commands[program](args);
+            return new Promise((resolve) => {
+                this.commands[program](args).then(() =>
+                    resolve()
+                );
+            });
         }
-
-        return new Promise((resolve) => { resolve(); });
     }
 
     commandNotFound(command) {
-        this.nterm.term.writeln(`\r\nCommand '${command}' not found, did you mean:\r\n\r\n  Literally anything else?`)
+        return new Promise((resolve) =>
+            this.nterm.term.writeln(`\r\nCommand '${command}' not found, did you mean:\r\n\r\n  Literally anything else?`, () => resolve()));
     }
 
     onEnter() {
         var command = this.nterm.command.trim();
 
-        this.processCmd(command).then(() => this.showPrompt());
-
+        return new Promise((resolve) => {
+            this.processCmd(command).then(() => this.showPrompt()).then(() => resolve());
+        });
         // this.nterm.term.writeln(`\n\r${command}`, () => this.showPrompt());
     }
 
     showPrompt() {
-        this.nterm.resetCommand();
-        this.nterm.term.write(this.nterm.prompt, () => {
-            this.nterm.term.promptLength = this.nterm.term._core.buffer.x;
+        return new Promise((resolve) => {
+            this.nterm.resetCommand().then(
+                this.nterm.term.write(this.nterm.prompt, () => {
+                    this.nterm.term.promptLength = this.nterm.term._core.buffer.x;
+                    resolve();
+                })
+            )
         });
     }
 
@@ -160,9 +170,12 @@ class Nosh {
     shutdown(args) {
         var defaults = {};
         args = { ...defaults, ...args };
-        this.nterm.term.write('\r\nShuting down in 3 2 1 ....', () => {
-            // Shutdown NorrOS. Possibly go into a halted state and show
-            // a button which can start it back up.
+        return new Promise((resolve) => {
+            this.nterm.term.write('\r\nShuting down in 3 2 1 ....', () => {
+                // Shutdown NorrOS. Possibly go into a halted state and show
+                // a button which can start it back up.
+                resolve();
+            });
         });
     }
 
@@ -174,19 +187,28 @@ class Nosh {
             throw Error(`nosh: cd: ${dir}: No such file or directory.`)
         }
         this.cwd = dir;
-        return this;
+        return this.showPrompt();
     }
 
     date() {
-        this.nterm.term.writeln();
-        this.nterm.term.writeln(new Date());
+        return new Promise((resolve) => {
+            this.nterm.term.writeln(() => {
+                this.nterm.term.writeln(new Date());
+                resolve();
+            });
+        })
     }
 
     clear() {
-        this.nterm.term.clear();
+        return new Promise((resolve) => {
+            this.nterm.term.clear(() => resolve());
+        })
     }
 
     help() {
+        return new Promise((resolve) => {
+            this.nterm.term.write(help, () => resolve());
+        })
         this.nterm.term.write(help);
         return 0;
     }
@@ -200,10 +222,14 @@ class Nosh {
         }
         var file = window.norros.mkernel.filesystem.getFile(this.cwd);
         if (file === null) {
-            this.nterm.term.writeln('ls: cannot access ')
+            return new Promise((resolve) => {
+                this.nterm.term.writeln('ls: cannot access ', () => resolve())
+            });
         }
         else if (file instanceof File) {
-            this.nterm.term.writeln(`${file.name}`);
+            return new Promise((resolve) => {
+                this.nterm.term.writeln(`${file.name}`, () => resolve());
+            });
         }
         else if (file instanceof Folder) {
             var files = [];
@@ -211,7 +237,9 @@ class Nosh {
                 files.push(file);
             }
             console.log(files);
-            this.nterm.term.writeln(files.join('\n'));
+            return new Promise((resolve) => {
+                this.nterm.term.writeln(files.join('\n'), () => resolve());
+            });
         }
         else {
             console.log(file);
@@ -220,7 +248,9 @@ class Nosh {
     }
 
     pwd() {
-        this.nterm.term.writeln(this.cwd);
+        return new Promise((resolve) => {
+            this.nterm.term.writeln(this.cwd, () => resolve());
+        });
     }
 
     static install() {

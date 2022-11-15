@@ -33,7 +33,10 @@ class NTerm {
         this.uiOptions = uiOptions;
     }
 
-    init(elem) {
+    init(elem, startingDir) {
+        if (typeof (startingDir) === 'undefined') {
+            startingDir = '/home/user';
+        }
         this.term = new window.Terminal(
             {
                 allowProposedApi: true,
@@ -45,12 +48,10 @@ class NTerm {
         this.term.focus();
         this.term.element.style.padding = `${this.uiOptions.padding}`;
 
-        this.nosh.showPrompt();
-    }
+        // TODO: make sure this actually exists? Maybe not though! There's no rules.
+        this.nosh.cwd = startingDir;
 
-    cd(dir) {
-        this.nosh.cd(dir);
-        return this;
+        this.nosh.showPrompt();
     }
 
     showPrompt() {
@@ -63,6 +64,7 @@ class NTerm {
 
     resetCommand() {
         this.command = '';
+        return new Promise((resolve) => resolve());
     }
 
     onData(e) {

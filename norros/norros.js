@@ -21,7 +21,7 @@ class NorrOS {
     }
 
     async startOS() {
-        this.mkernel.start(new NTerm('div.terminal').cd('/home/user'));
+        this.mkernel.start(new NTerm('div.terminal'));
         return new Promise((resolve) => { resolve(); });
     }
 }
