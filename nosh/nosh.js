@@ -110,6 +110,7 @@ class Nosh {
             'help': (args) => this.help(args),
             'ls': (args) => this.ls(args),
             'pwd': (args) => this.pwd(args),
+            'shutdown': (args) => this.shutdown(args),
         }
     }
 
@@ -151,6 +152,16 @@ class Nosh {
         this.nterm.resetCommand();
         this.nterm.term.write(this.nterm.prompt, () => {
             this.nterm.term.promptLength = this.nterm.term._core.buffer.x;
+        });
+    }
+
+    // commands below, alphabetized
+
+    shutdown(args) {
+        var defaults = {};
+        args = { ...defaults, ...args };
+        this.nterm.term.write('\r\nShuting down in 3 2 1 ....', () => {
+            // do something? 
         });
     }
 
