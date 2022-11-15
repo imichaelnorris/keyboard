@@ -161,7 +161,8 @@ class Nosh {
         var defaults = {};
         args = { ...defaults, ...args };
         this.nterm.term.write('\r\nShuting down in 3 2 1 ....', () => {
-            // do something? 
+            // Shutdown NorrOS. Possibly go into a halted state and show
+            // a button which can start it back up.
         });
     }
 
