@@ -23,11 +23,8 @@ class NTerm {
         this.uiOptions = uiOptions;
 
         this.prompt = 'NorrOS \x1B[1;3;31mNorrOS\x1B[0m $ ';
+        this.nosh = new Nosh(this);
         this.init(elem);
-
-        // TOOD: handle this in nosh.
-        this.commands = [];
-        this.nosh = new Nosh();
     }
 
     init(elem) {
@@ -42,7 +39,7 @@ class NTerm {
         this.term.focus();
         this.term.element.style.padding = `${this.uiOptions.padding}`;
 
-        this.showPrompt();
+        this.nosh.showPrompt();
     }
 
     cd(dir) {
@@ -51,6 +48,7 @@ class NTerm {
     }
 
     showPrompt() {
+        throw Error("Remove nterm.showPrompt()");
         this.resetCommand();
         this.term.write(this.prompt, () => {
             this.term.promptLength = this.term._core.buffer.x;
@@ -65,7 +63,7 @@ class NTerm {
         var term = this.term;
         switch (e) {
             case '\u0003': // Ctrl+C
-                term.write('^C\r\n', () => this.showPrompt());
+                term.write('^C\r\n', () => this.nosh.showPrompt());
                 break;
             case '\r': // Enter
                 this.onEnter();
@@ -111,9 +109,10 @@ class NTerm {
         }
     }
 
+    // remove and move down into nosh
     onEnter() {
-        this.commands.push(this.command);
-        this.term.writeln(`\n\r${this.command}`, () => this.showPrompt());
+        this.nosh.onEnter();
+        // this.term.writeln(`\n\r${this.command}`, () => this.showPrompt());
     }
 
     get options() {

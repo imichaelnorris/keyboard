@@ -91,13 +91,44 @@ A star (*) next to a name means that the command is disabled.
  *{ COMMANDS ; }`;
 
 class Nosh {
-    constructor(term) {
-        this.term = term;
+    constructor(nterm) {
+        this.nterm = nterm;
         this.cwd = null;
+        this.variables = {};
+        this.commands = {};
+
+        this.installBuiltinCommands();
+    }
+
+    installBuiltinCommands() {
+        this.commands = {
+            ...this.commands,
+            'cd': this.cd,
+            'clear': this.clear,
+            'date': this.date,
+            'help': this.help,
+            'ls': this.ls,
+            'pwd': this.pwd,
+        }
     }
 
     processCmd() {
-        var command = this.term.command
+        var command = this.nterm.command.trim();
+        if (command.length === 0) {
+
+        }
+    }
+
+    onEnter() {
+        var command = this.nterm.command.trim();
+        this.nterm.term.writeln(`\n\r${command}`, () => this.showPrompt());
+    }
+
+    showPrompt() {
+        this.nterm.resetCommand();
+        this.nterm.term.write(this.nterm.prompt, () => {
+            this.nterm.term.promptLength = this.nterm.term._core.buffer.x;
+        });
     }
 
     cd(dir) {
@@ -111,12 +142,17 @@ class Nosh {
         return this;
     }
 
+    date() {
+        this.nterm.term.writeln();
+        this.nterm.term.writeln(new Date());
+    }
+
     clear() {
-        this.term.clear();
+        this.nterm.term.clear();
     }
 
     help() {
-        this.term.writeln(help);
+        this.nterm.term.writeln(help);
         return 0;
     }
 
@@ -129,10 +165,10 @@ class Nosh {
         }
         var file = window.norros.mkernel.filesystem.getFile(this.cwd);
         if (file === null) {
-            this.term.writeln('ls: cannot access ')
+            this.nterm.term.writeln('ls: cannot access ')
         }
         else if (file instanceof File) {
-            this.term.writeln(`${file.name}`);
+            this.nterm.term.writeln(`${file.name}`);
         }
         else if (file instanceof Folder) {
             var files = [];
@@ -140,7 +176,7 @@ class Nosh {
                 files.push(file);
             }
             console.log(files);
-            this.term.writeln(files.join('\n'));
+            this.nterm.term.writeln(files.join('\n'));
         }
         else {
             console.log(file);
@@ -149,12 +185,7 @@ class Nosh {
     }
 
     pwd() {
-        this.term.writeln(this.cwd);
-    }
-
-    date() {
-        this.term.writeln();
-        this.term.writeln(new Date());
+        this.nterm.term.writeln(this.cwd);
     }
 
     static install() {
