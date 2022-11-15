@@ -133,10 +133,12 @@ class Nosh {
             return this.commandNotFound(program);
         } else {
             return new Promise((resolve) => {
-                this.commands[program](args).then(() =>
+                this.commands[program].apply(this, args).then(() =>
                     resolve()
                 );
-            });
+            }).catch((err) => {
+                console.error(err);
+            });;
         }
     }
 
@@ -151,7 +153,6 @@ class Nosh {
         return new Promise((resolve) => {
             this.processCmd(command).then(() => this.showPrompt()).then(() => resolve());
         });
-        // this.nterm.term.writeln(`\n\r${command}`, () => this.showPrompt());
     }
 
     showPrompt() {
@@ -180,8 +181,8 @@ class Nosh {
     }
 
     cd(dir) {
-        if (typeof (dir) === undefined || dir == '') {
-            return this;
+        if (typeof (dir) === 'undefined' || typeof (dir) == 'string' && dir.trim() == '') {
+            return new Promise((resolve) => resolve());
         }
         if (!window.norros.mkernel.filesystem.fileExists(dir)) {
             throw Error(`nosh: cd: ${dir}: No such file or directory.`)
@@ -192,8 +193,8 @@ class Nosh {
 
     date() {
         return new Promise((resolve) => {
-            this.nterm.term.writeln(() => {
-                this.nterm.term.writeln(new Date());
+            this.nterm.term.writeln('', () => {
+                this.nterm.term.writeln(`${new Date()}`);
                 resolve();
             });
         })
@@ -201,7 +202,9 @@ class Nosh {
 
     clear() {
         return new Promise((resolve) => {
-            this.nterm.term.clear(() => resolve());
+            this.nterm.term.clear(() => {
+                resolve()
+            });
         })
     }
 
@@ -236,13 +239,11 @@ class Nosh {
             for (var file in file.files) {
                 files.push(file);
             }
-            console.log(files);
             return new Promise((resolve) => {
                 this.nterm.term.writeln(files.join('\n'), () => resolve());
             });
         }
         else {
-            console.log(file);
             throw Error('ls: some kind of error occurred');
         }
     }
