@@ -16,15 +16,21 @@ class NTerm {
         if (typeof (elem) === 'string') {
             elem = document.querySelector(elem);
         }
-        if (typeof (uiOptions) === 'undefined') {
-            uiOptions = NTerm.defaultUIOptions;
-        }
 
-        this.uiOptions = uiOptions;
+        this.setUIOptions(uiOptions);
 
         this.prompt = 'NorrOS \x1B[1;3;31mNorrOS\x1B[0m $ ';
         this.nosh = new Nosh(this);
         this.init(elem);
+    }
+
+    setUIOptions(uiOptions) {
+        if (typeof (uiOptions) === 'undefined') {
+            uiOptions = NTerm.defaultUIOptions;
+        } else {
+            uiOptions = { ...NTerm.defaultUIOptions, ...uiOptions };
+        }
+        this.uiOptions = uiOptions;
     }
 
     init(elem) {
@@ -109,10 +115,8 @@ class NTerm {
         }
     }
 
-    // remove and move down into nosh
     onEnter() {
         this.nosh.onEnter();
-        // this.term.writeln(`\n\r${this.command}`, () => this.showPrompt());
     }
 
     get options() {

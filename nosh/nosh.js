@@ -4,7 +4,8 @@ export const name = 'nosh';
 
 export { Nosh }
 
-var help = `Nosh, version 0.0.1
+var help = `
+Nosh, version 0.0.1
 These shell commands are defined externally on stone tablets which have been buried in
 the Mojave Desert, but for your convenience we have also included them in this shell.
 Type \`help' to see this list.
@@ -103,25 +104,47 @@ class Nosh {
     installBuiltinCommands() {
         this.commands = {
             ...this.commands,
-            'cd': this.cd,
-            'clear': this.clear,
-            'date': this.date,
-            'help': this.help,
-            'ls': this.ls,
-            'pwd': this.pwd,
+            'cd': (args) => this.cd(args),
+            'clear': (args) => this.clear(args),
+            'date': (args) => this.date(args),
+            'help': (args) => this.help(args),
+            'ls': (args) => this.ls(args),
+            'pwd': (args) => this.pwd(args),
         }
     }
 
-    processCmd() {
+    processCmd(command) {
         var command = this.nterm.command.trim();
         if (command.length === 0) {
-
+            this.nterm.term.write('\n\r');
+            return new Promise((resolve) => { resolve(); });
         }
+        var progArgs = command.split();
+        var program = '';
+        var args = [];
+        if (progArgs.length >= 2) {
+            args = progArgs.slice(1);
+        }
+        program = progArgs[0];
+        if (!(program in this.commands)) {
+            this.commandNotFound(program);
+        } else {
+            this.commands[program](args);
+        }
+
+        return new Promise((resolve) => { resolve(); });
+    }
+
+    commandNotFound(command) {
+        this.nterm.term.writeln(`\r\nCommand '${command}' not found, did you mean:\r\n\r\n  Literally anything else?`)
     }
 
     onEnter() {
         var command = this.nterm.command.trim();
-        this.nterm.term.writeln(`\n\r${command}`, () => this.showPrompt());
+
+        this.processCmd(command).then(() => this.showPrompt());
+
+        // this.nterm.term.writeln(`\n\r${command}`, () => this.showPrompt());
     }
 
     showPrompt() {
@@ -152,7 +175,7 @@ class Nosh {
     }
 
     help() {
-        this.nterm.term.writeln(help);
+        this.nterm.term.write(help);
         return 0;
     }
 
