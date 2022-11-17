@@ -1,6 +1,8 @@
 # NorrOS
 A styled keyboard + terminal emulator in JavaScript.
 
+Demo at [michaenorris.com/norros/](https://michaelnorris.com/norros/)
+
 ![](/norros-screenshot.png?raw=true)
 
 # Name
